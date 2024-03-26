@@ -29,7 +29,8 @@ Plug 'https://github.com/vim-python/python-syntax' " Python syntax highlighting
 Plug 'ThePrimeagen/vim-be-good'
 Plug 'tpope/vim-fugitive'
 Plug 'navarasu/onedark.nvim'
-
+Plug 'tpope/vim-rhubarb'
+Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.6' }
 " or                                , { 'branch': '0.1.x' }
@@ -82,7 +83,7 @@ let g:onedark_config = {
     \ 'style': 'darker',
 \}
 
-:colorscheme purify
+:colorscheme dracula
 
 let g:NERDTreeWinPos = "right"
 let g:NERDTreeDirArrowExpandable="|"
