@@ -33,7 +33,7 @@ require("lazy").setup({
 
 		config = function()
 			require("tokyonight").setup({
-				style = "night",
+				style = "storm",
 				transparent = true,
 				terminal_colors = true,
 					styles = { comments = { italic = true },
@@ -44,6 +44,73 @@ require("lazy").setup({
 					floats = "transparent",
 			  },
 
+			})
+		end,
+	},
+
+	{
+		"stevearc/oil.nvim", 
+		config = function()
+			require("oil").setup({
+				theme = "tokyonight",
+				italic_comments = true,
+				italic_keywords = true,
+				italic_functions = true,
+				italic_variables = true,
+				transparent_background = true,
+				sidebars = { "qf", "vista_kind", "terminal", "packer" },
+				floating_windows = { "qf", "terminal", "packer" },
+			})
+		end,
+	},
+
+	{
+		"zbirenbaum/copilot.lua",
+		cmd = "Copilot",
+		event = "InsertEnter",
+		config = function()
+			require('copilot').setup({
+			  panel = {
+				enabled = true,
+				auto_refresh = false,
+				keymap = {
+				  jump_prev = "[[",
+				  jump_next = "]]",
+				  accept = "<CR>",
+				  refresh = "gr",
+				  open = "<M-CR>"
+				},
+				layout = {
+				  position = "bottom", -- | top | left | right
+				  ratio = 0.4
+				},
+			  },
+			  suggestion = {
+				enabled = true,
+				auto_trigger = true,
+				debounce = 75,
+				keymap = {
+				  accept = "<Tab>",
+				  accept_word = false,
+				  accept_line = false,
+				  next = "<M-]>",
+				  prev = "<M-[>",
+				  dismiss = "<C-]>",
+				},
+			  },
+			  filetypes = {
+				yaml = false,
+				markdown = false,
+				help = false,
+				gitcommit = false,
+				gitrebase = false,
+				hgcommit = false,
+				svn = false,
+				cvs = false,
+				["."] = false,
+			  },
+			  copilot_node_command = 'node', -- Node.js version must be > 18.x
+			  server_opts_overrides = {},
 			})
 		end,
 	},
@@ -65,8 +132,13 @@ require("lazy").setup({
 	},
 
     {
-    	'nvim-telescope/telescope.nvim', tag = '0.1.6',
-      	dependencies = { 'nvim-lua/plenary.nvim' }
+    	'nvim-telescope/telescope.nvim',
+		tag = '0.1.6',
+      	dependencies = { 'nvim-lua/plenary.nvim' },
+		defaults = {
+			layout_strategy = "vertical",
+			layout_config = { height = 0.95 },
+		},
     },
 
 	{
@@ -102,6 +174,7 @@ require("lazy").setup({
 			  snippet = {
 				expand = function(args)
 				  vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
+
 				end,
 			  },
 			  window = {
@@ -143,37 +216,62 @@ require("lazy").setup({
 			require'lspconfig'.lua_ls.setup{
 				capabilities = capabilities,
 			}
+
+			require('lspconfig').tsserver.setup {
+				capabilities = capabilities,
+			}
 		end,
 	},
---[[
-	{
-		"L3MON4D3/LuaSnip",
-		-- follow latest release.
-		version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
-		-- install jsregexp (optional!).
-		build = "make install_jsregexp"
-	}
-]]
 })
 
 vim.cmd[[colorscheme tokyonight]]
 
--- Custom key bindings
+local function map(m, k, v)
+		vim.keymap.set(m, k, v)
+end
 
-vim.keymap.set("n", "<A-l>", ":Lazy<CR>")
-vim.keymap.set("n", "<A-n>", ":tabnew<CR>")
-vim.keymap.set("n", "<A-q>", ":q<CR>")
-vim.keymap.set("n", "<A-w>", ":w<CR>")
-vim.keymap.set("n", "<A-s>", ":wq<CR>")
-vim.keymap.set("n", "<A-F>", ":Telescope find_files<CR>")
+-- Misc keymaps
 
-vim.keymap.set({"i"}, "<C-K>", function() ls.expand() end, {silent = true})
-vim.keymap.set({"i", "s"}, "<C-L>", function() ls.jump( 1) end, {silent = true})
-vim.keymap.set({"i", "s"}, "<C-J>", function() ls.jump(-1) end, {silent = true})
+map("n", "<A-n>", ":tabnew<CR>")
+map("n", "<A-q>", ":q<CR>")
+map("n", "<A-w>", ":w<CR>")
+map("n", "<A-s>", ":wq<CR>")
 
-vim.keymap.set({"i", "s"}, "<C-E>", function()
-	if ls.choice_active() then
-		ls.change_choice(1)
-	end
-end, {silent = true})
+-- Lazy keymaps
 
+map("n", "<A-l>", ":Lazy<CR>")
+
+-- Buffer keymaps
+
+map("n", "<A-b>", ":vs :buf<CR>")
+
+-- Oil keymaps
+
+map("n", "<A-c>", ":Oil<CR>")
+
+-- Copilot keymaps
+
+map("n", "<A-x>", ":Copilot<CR>")
+map("n", "<A-]>", ":Copilot next<CR>")
+map("n", "<A-[>", ":Copilot prev<CR>")
+
+-- LSP keymaps
+
+map("n", "<A-d>", ":lua vim.lsp.buf.definition()<CR>")
+map("n", "<A-;>", ":lua vim.lsp.buf.rename()<CR>")
+map("n", "K", ":lua vim.lsp.buf.hover()<CR>")
+
+-- Telescope keymaps
+
+map("n", "<A-F>", ":Telescope find_files<CR>")
+map("n", "<A-G>", ":Telescope live_grep<CR>")
+map("n", "<A-B>", ":Telescope buffers<CR>")
+map("n", "<A-H>", ":Telescope help_tags<CR>")
+map("n", "<A-M>", ":Telescope marks<CR>")
+map("n", "<A-R>", ":Telescope registers<CR>")
+map("n", "<A-S>", ":Telescope lsp_document_symbols<CR>")
+map("n", "<A-T>", ":Telescope treesitter<CR>")
+map("n", "<A-V>", ":Telescope vim_options<CR>")
+map("n", "<A-X>", ":Telescope commands<CR>")
+map("n", "<A-Z>", ":Telescope colorscheme<CR>")
+map("n", "<A-~>", ":Telescope lsp_workspace_symbols<CR>")
