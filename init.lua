@@ -177,17 +177,23 @@ require("lazy").setup({
 	},
 
 	{
-		"stevearc/oil.nvim",
+		"nvim-neo-tree/neo-tree.nvim",
+		branch = "v3.x",
+		dependencies = {
+			"MunifTanjim/nui.nvim",
+		},
 		config = function()
-			require("oil").setup({
-				theme = "tokyonight",
-				italic_comments = true,
-				italic_keywords = true,
-				italic_functions = true,
-				italic_variables = true,
-				transparent_background = true,
-				sidebars = { "qf", "vista_kind", "terminal", "packer" },
-				floating_windows = { "qf", "terminal", "packer" },
+			require("neo-tree").setup({
+				auto_close = true,
+				update_focused_file = {
+					enable = true,
+					update_cwd = true,
+				},
+				view = {
+					width = 30,
+					side = "left",
+					auto_resize = true,
+				},
 			})
 		end,
 	},
@@ -371,6 +377,10 @@ map("n", "<A-k>", "<C-w>-5")
 map("n", "<A-h>", "<C-w><5")
 map("n", "<A-l>", "<C-w>>5")
 
+-- NeoTree keymaps
+
+map("n", "<C-n>", ":Neotree toggle<CR>")
+
 -- Lazy keymaps
 
 map("n", "<A-L>", ":Lazy<CR>")
@@ -390,10 +400,6 @@ map("n", "<A-6>", ":BufferLineGoToBuffer 6<CR>")
 map("n", "<A-7>", ":BufferLineGoToBuffer 7<CR>")
 map("n", "<A-8>", ":BufferLineGoToBuffer 8<CR>")
 map("n", "<A-9>", ":BufferLineGoToBuffer 9<CR>")
-
--- Oil keymaps
-
-map("n", "<A-c>", ":Oil<CR>")
 
 -- Copilot keymaps
 
