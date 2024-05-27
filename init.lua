@@ -104,7 +104,7 @@ require("lazy").setup({
 				tabline = {},
 				winbar = {},
 				inactive_winbar = {},
-				extensions = {}
+				extensions = {},
 			}
 		end
 	},
@@ -304,7 +304,6 @@ require("lazy").setup({
 					{ name = 'nvim_lua' },
 					{ name = 'treesitter' },
 					{ name = 'nvim_lsp' },
-					{ name = 'copilot' },
 				}),
 				mapping = cmp.mapping.preset.insert({
 					['<C-d>'] = cmp.mapping.scroll_docs(-4),
@@ -321,7 +320,7 @@ require("lazy").setup({
 	{
 		"hrsh7th/cmp-nvim-lsp",
 		config = function()
-			require 'cmp'.setup {
+			require('cmp').setup {
 				sources = {
 					{ name = 'nvim_lsp' },
 				}
@@ -331,19 +330,61 @@ require("lazy").setup({
 
 			require('lspconfig').clangd.setup {
 				capabilities = capabilities,
-
+				config = {
+					cmd = { "clangd", "--background-index" },
+					filetypes = { "c", "cpp", "objc", "objcpp" },
+					root_dir = function(fname)
+						return root_pattern(fname) or vim.loop.os_homedir()
+					end,
+				},
 			}
 
-			require 'lspconfig'.pyright.setup {
+			require('lspconfig').bashls.setup {
 				capabilities = capabilities,
 			}
 
-			require 'lspconfig'.lua_ls.setup {
+			require('lspconfig').pyright.setup {
+				capabilities = capabilities,
+				config = {
+					settings = {
+						python = {
+							analysis = {
+								autoSearchPaths = true,
+								useLibraryCodeForTypes = true,
+							},
+						},
+					},
+				},
+			}
+
+			require('lspconfig').lua_ls.setup {
 				capabilities = capabilities,
 			}
 
 			require('lspconfig').tsserver.setup {
 				capabilities = capabilities,
+			}
+
+			require('lspconfig').cssls.setup {
+				capabilities = capabilities,
+				config = {
+					cmd = { "vscode-css-language-server", "--stdio" },
+					filetypes = { "css", "scss", "less" },
+					root_dir = function(fname)
+						return root_pattern(fname) or vim.loop.os_homedir()
+					end,
+					settings = {
+						css = {
+							validate = true
+						},
+						less = {
+							validate = true
+						},
+						scss = {
+							validate = true
+						}
+					}
+				}
 			}
 		end,
 	},
@@ -362,6 +403,7 @@ map("n", "<A-q>", ":q<CR>")
 map("n", "<A-s>", ":w<CR>")
 map("n", "<A-w>", ":wq<CR>")
 map("n", "<A-%>", ":source %<CR>")
+map("n", "<C-C>", ":e ~/.config/nvim/init.lua<CR>")
 
 -- Move window keymaps
 
