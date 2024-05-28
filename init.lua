@@ -4,8 +4,10 @@ vim.o.shiftwidth = 4
 vim.o.smarttab = true
 vim.o.autoindent = true
 vim.o.mouse = ""
-
-vim.opt.termguicolors = true
+vim.o.hlsearch = false
+vim.o.background = "dark"
+vim.o.termguicolors = true
+vim.o.showcmd = false
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
@@ -27,7 +29,20 @@ require("lazy").setup({
 	{
 		'neovim/nvim-lspconfig',
 		'tpope/vim-fugitive',
-		'AndreM222/copilot-lualine'
+		'AndreM222/copilot-lualine',
+		'hrsh7th/cmp-nvim-lsp',
+		'hrsh7th/cmp-buffer',
+		'hrsh7th/cmp-path',
+		'hrsh7th/cmp-nvim-lua',
+		'hrsh7th/cmp-cmdline',
+	},
+
+	{
+		"rafamadriz/friendly-snippets",
+		config = function()
+			require("luasnip/loaders/from_vscode").lazy_load()
+		end,
+
 	},
 
 	{
@@ -77,8 +92,8 @@ require("lazy").setup({
 						winbar = {},
 					},
 					ignore_focus = {},
-					always_divide_middle = true,
-					globalstatus = false,
+					always_divide_middle = false,
+					globalstatus = true,
 					refresh = {
 						statusline = 1000,
 						tabline = 1000,
@@ -88,10 +103,10 @@ require("lazy").setup({
 				sections = {
 					lualine_a = { 'mode' },
 					lualine_b = { 'branch', 'diff', 'diagnostics' },
-					lualine_c = { 'selectioncount', 'tabs', 'filename' },
+					lualine_c = { 'selectioncount' },
 					lualine_x = { 'copilot', 'encoding', 'fileformat', 'filetype' },
 					lualine_y = { 'progress' },
-					lualine_z = { 'location' }
+					lualine_z = { 'location', 'datetime' },
 				},
 				inactive_sections = {
 					lualine_a = {},
@@ -101,10 +116,17 @@ require("lazy").setup({
 					lualine_y = {},
 					lualine_z = {}
 				},
-				tabline = {},
+				tabline = {
+					lualine_a = { 'buffers' },
+					lualine_b = {},
+					lualine_c = { 'filename' },
+					lualine_x = {},
+					lualine_y = {},
+					lualine_z = { 'tabs' }
+				},
 				winbar = {},
 				inactive_winbar = {},
-				extensions = {},
+				extensions = { 'quickfix' },
 			}
 		end
 	},
@@ -284,6 +306,17 @@ require("lazy").setup({
 	},
 
 	{
+		"L3MON4D3/LuaSnip",
+		dependencies = "rafamadriz/friendly-snippets",
+		config = function()
+			require("luasnip").config.set_config({
+				history = true,
+				updateevents = "TextChanged,TextChangedI",
+			})
+		end,
+	},
+
+	{
 		"hrsh7th/nvim-cmp",
 		config = function()
 			local cmp = require("cmp")
@@ -291,7 +324,8 @@ require("lazy").setup({
 			cmp.setup({
 				snippet = {
 					expand = function(args)
-						vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
+						-- vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
+						require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
 					end,
 				},
 				window = {
@@ -304,6 +338,7 @@ require("lazy").setup({
 					{ name = 'nvim_lua' },
 					{ name = 'treesitter' },
 					{ name = 'nvim_lsp' },
+					{ name = 'luasnip' },
 				}),
 				mapping = cmp.mapping.preset.insert({
 					['<C-d>'] = cmp.mapping.scroll_docs(-4),
