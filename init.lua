@@ -27,6 +27,7 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
 
 	{
+		'nvim-tree/nvim-web-devicons',
 		'neovim/nvim-lspconfig',
 		'tpope/vim-fugitive',
 		'AndreM222/copilot-lualine',
@@ -69,16 +70,6 @@ require("lazy").setup({
 	},
 
 	{
-
-		'akinsho/bufferline.nvim',
-		version = "*",
-		dependencies = 'nvim-tree/nvim-web-devicons',
-		config = function()
-			require("bufferline").setup({})
-		end,
-	},
-
-	{
 		'nvim-lualine/lualine.nvim',
 		config = function()
 			require('lualine').setup {
@@ -102,7 +93,7 @@ require("lazy").setup({
 				},
 				sections = {
 					lualine_a = { 'mode' },
-					lualine_b = { 'branch', 'diff', 'diagnostics' },
+					lualine_b = { 'branch', 'diff', 'diagnostics', 'filename' },
 					lualine_c = { 'selectioncount' },
 					lualine_x = { 'copilot', 'encoding', 'fileformat', 'filetype' },
 					lualine_y = { 'progress' },
@@ -119,7 +110,7 @@ require("lazy").setup({
 				tabline = {
 					lualine_a = { 'buffers' },
 					lualine_b = {},
-					lualine_c = { 'filename' },
+					lualine_c = {},
 					lualine_x = {},
 					lualine_y = {},
 					lualine_z = { 'tabs' }
@@ -466,17 +457,18 @@ map("n", "<A-L>", ":Lazy<CR>")
 
 map("n", "<C-K>", ":bd<CR>")
 
--- Bufferline keymaps
+-- Luline keymaps
 
-map("n", "<A-1>", ":BufferLineGoToBuffer 1<CR>")
-map("n", "<A-2>", ":BufferLineGoToBuffer 2<CR>")
-map("n", "<A-3>", ":BufferLineGoToBuffer 3<CR>")
-map("n", "<A-4>", ":BufferLineGoToBuffer 4<CR>")
-map("n", "<A-5>", ":BufferLineGoToBuffer 5<CR>")
-map("n", "<A-6>", ":BufferLineGoToBuffer 6<CR>")
-map("n", "<A-7>", ":BufferLineGoToBuffer 7<CR>")
-map("n", "<A-8>", ":BufferLineGoToBuffer 8<CR>")
-map("n", "<A-9>", ":BufferLineGoToBuffer 9<CR>")
+map("n", "<A-0>", ":LualineToggle<CR>")
+map("n", "<A-1>", ":LualineBuffersJump 1<CR>")
+map("n", "<A-2>", ":LualineBuffersJump 2<CR>")
+map("n", "<A-3>", ":LualineBuffersJump 3<CR>")
+map("n", "<A-4>", ":LualineBuffersJump 4<CR>")
+map("n", "<A-5>", ":LualineBuffersJump 5<CR>")
+map("n", "<A-6>", ":LualineBuffersJump 6<CR>")
+map("n", "<A-7>", ":LualineBuffersJump 7<CR>")
+map("n", "<A-8>", ":LualineBuffersJump 8<CR>")
+map("n", "<A-9>", ":LualineBuffersJump 9<CR>")
 
 -- Copilot keymaps
 
