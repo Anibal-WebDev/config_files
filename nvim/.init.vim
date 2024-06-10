@@ -40,7 +40,7 @@ let g:python_highlight_all = 1
 " Auto-completion  For Javascript, typescript, html, jsx ...etc
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'} " this is for auto complete, prettier and tslinting
 
-let g:coc_global_extensions = ['coc-tslint-plugin', 'coc-tsserver', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-jedi']  " list of CoC extensions needed
+let g:coc_global_extensions = ['coc-tslint-plugin', 'coc-tsserver', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier']  " list of CoC extensions needed
 
 Plug 'jiangmiao/auto-pairs' "this will auto close ( [ { < 
 
@@ -83,7 +83,7 @@ let g:onedark_config = {
     \ 'style': 'darker',
 \}
 
-:colorscheme dracula
+:colorscheme purify
 
 let g:NERDTreeWinPos = "right"
 let g:NERDTreeDirArrowExpandable="|"
